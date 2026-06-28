@@ -31,10 +31,12 @@ services:
       AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
       AIRFLOW__WEBSERVER__SECRET_KEY: ${AIRFLOW_SECRET_KEY}
       PYTHONPATH: /opt/airflow/src
+      GOOGLE_APPLICATION_CREDENTIALS: ${SA_KEY_PATH}
     volumes:
       - ./dags:/opt/airflow/dags
       - airflow-logs:/opt/airflow/logs
-      - ./src/opt/airflow/src
+      - ./src:/opt/airflow/src
+      - ${SA_KEY_PATH}:${SA_KEY_PATH}
     command: webserver
     restart: always
   airflow-scheduler:
@@ -48,9 +50,11 @@ services:
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB}
       AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
       PYTHONPATH: /opt/airflow/src
+      GOOGLE_APPLICATION_CREDENTIALS: ${SA_KEY_PATH}
     volumes:
       - ./dags:/opt/airflow/dags
       - airflow-logs:/opt/airflow/logs
       - ./src:/opt/airflow/src
+      - ${SA_KEY_PATH}:${SA_KEY_PATH}
     command: scheduler
     restart: always
