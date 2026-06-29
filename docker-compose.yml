@@ -32,6 +32,8 @@ services:
       AIRFLOW__WEBSERVER__SECRET_KEY: ${AIRFLOW_SECRET_KEY}
       PYTHONPATH: /opt/airflow/src
       GOOGLE_APPLICATION_CREDENTIALS: ${SA_KEY_PATH}
+      GCP_PROJECT_ID: ${GCP_PROJECT_ID}
+      GCP_BUCKET_RAW: ${GCP_BUCKET_RAW}
     volumes:
       - ./dags:/opt/airflow/dags
       - airflow-logs:/opt/airflow/logs
@@ -51,6 +53,8 @@ services:
       AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
       PYTHONPATH: /opt/airflow/src
       GOOGLE_APPLICATION_CREDENTIALS: ${SA_KEY_PATH}
+      GCP_PROJECT_ID: ${GCP_PROJECT_ID}
+      GCP_BUCKET_RAW: ${GCP_BUCKET_RAW}
     volumes:
       - ./dags:/opt/airflow/dags
       - airflow-logs:/opt/airflow/logs
