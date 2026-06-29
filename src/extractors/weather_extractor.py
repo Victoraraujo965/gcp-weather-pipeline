@@ -5,6 +5,8 @@ from datetime import datetime, timezone
 from google.cloud import storage
 from dotenv import load_dotenv
 load_dotenv()
+from google.cloud import bigquery
+
 
 CITIES = [
     {"name": "São Paulo", "lat": -23.5500, "lon": -46.6330},
@@ -77,19 +79,32 @@ def save_to_gcs(df, city):
     )
     print(f"Salvo: {filename}")
 
+def load_to_bigquery(df, city):
+    client = bigquery.Client(project=os.getenv("GCP_PROJECT_ID"))
+    table_id = f"{os.getenv('GCP_PROJECT_ID')}.raw.weather_raw"
+
+    job_config = bigquery.LoadJobConfig(
+        write_disposition="WRITE_APPEND",
+        autodetect=True
+
+    )
+
+    job = client.load_table_from_dataframe(df, table_id, job_config=job_config)
+    job.result()
+    print(f"Carregando no BigQuery: {city['name']}")
+
 def run():
-    
     for capital in CITIES: 
-        print(f"Extraindo dados de {capital ['name']}")
-
+        print(f"Extraindo dados de {capital['name']}")
         data = fetch_weather(capital)
-
         if data is None:
             continue
-
         df = parse_weather(data, capital)
-
         save_to_gcs(df, capital)
+        try:
+            load_to_bigquery(df, capital)
+        except Exception as e:
+            print(f"Erro BigQuery {capital['name']}: {e}")
 
 if __name__ == "__main__":
     run()
