@@ -26,6 +26,7 @@ services:
     ports:
       - "8080:8080"
     environment:
+      _PIP_ADDITIONAL_REQUIREMENTS: dbt-bigquery
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB}
       AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
@@ -37,6 +38,7 @@ services:
     volumes:
       - ./dags:/opt/airflow/dags
       - airflow-logs:/opt/airflow/logs
+      - ./weather_transform:/opt/airflow/weather_transform
       - ./src:/opt/airflow/src
       - ${SA_KEY_PATH}:${SA_KEY_PATH}
     command: webserver
@@ -48,6 +50,7 @@ services:
     depends_on:
       - postgres
     environment:
+      _PIP_ADDITIONAL_REQUIREMENTS: dbt-bigquery
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB}
       AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
@@ -57,6 +60,7 @@ services:
       GCP_BUCKET_RAW: ${GCP_BUCKET_RAW}
     volumes:
       - ./dags:/opt/airflow/dags
+      - ./weather_transform:/opt/airflow/weather_transform
       - airflow-logs:/opt/airflow/logs
       - ./src:/opt/airflow/src
       - ${SA_KEY_PATH}:${SA_KEY_PATH}
