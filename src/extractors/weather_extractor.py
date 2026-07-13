@@ -7,6 +7,11 @@ from dotenv import load_dotenv
 load_dotenv()
 from google.cloud import bigquery
 
+def notify_telegram(message): 
+    token = os.getenv("TELEGRAM_TOKEN")
+    chat_id = os.getenv("TELEGRAM_CHAT_ID")
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+    requests.post(url, data={"chat_id": chat_id, "text": message})
 
 CITIES = [
     {"name": "São Paulo", "lat": -23.5500, "lon": -46.6330},
