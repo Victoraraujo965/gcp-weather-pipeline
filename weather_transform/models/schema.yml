@@ -1,0 +1,50 @@
+version: 2
+
+models:
+  - name: stg_weather
+    description: "Dados climáticos horários limpos e deduplicados das 5 capitais brasileiras."
+    columns:
+      - name: time_utc
+        description: "Timestamp UTC da medição horária."
+        tests:
+          - not_null
+      - name: city
+        description: "Nome da capital brasileira."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['São Paulo', 'Manaus', 'Rio de Janeiro', 'Porto Alegre', 'Fortaleza']
+      - name: temperature_2m
+        description: "Temperatura a 2m do solo em graus Celsius."
+        tests:
+          - not_null
+      - name: precipitation
+        description: "Precipitação acumulada em mm."
+      - name: relative_humidity_2m
+        description: "Umidade relativa do ar em percentual."
+      - name: uv_index
+        description: "Índice UV."
+      - name: wind_speed_10m
+        description: "Velocidade do vento a 10m em km/h."
+      - name: weather_code
+        description: "Código WMO de condição climática."
+
+  - name: agg_weather_daily
+    description: "Agregações diárias de clima por cidade."
+    columns:
+      - name: date_utc
+        description: "Data UTC da agregação."
+        tests:
+          - not_null
+      - name: city
+        description: "Nome da capital brasileira."
+        tests:
+          - not_null
+      - name: avg_temperature
+        description: "Temperatura média diária em graus Celsius."
+      - name: max_temperature
+        description: "Temperatura máxima do dia."
+      - name: min_temperature
+        description: "Temperatura mínima do dia."
+      - name: total_precipitation_mm
+        description: "Precipitação total do dia em mm."
