@@ -10,6 +10,8 @@ Pipeline de engenharia de dados end-to-end na Google Cloud Platform que extrai d
 
 ---
 
+```
+
 ## Arquitetura
 Open-Meteo API
 ↓
@@ -20,6 +22,8 @@ Google Cloud Storage (Parquet - Raw)
 BigQuery Raw → dbt Silver → dbt Gold
 ↓
 Alertas via Telegram
+
+```
 
 ## Stack
 
@@ -89,6 +93,7 @@ Alertas via Telegram Bot integrados ao Airflow:
 | **Total** | **~R$ 65/mês** |
 
 ---
+```
 
 ## Estrutura do Projeto
 gcp-weather-pipeline/
@@ -109,6 +114,7 @@ gcp-weather-pipeline/
 ├── terraform/                   # IaC — infraestrutura completa
 ├── docker-compose.yml           # Airflow + Postgres
 └── .env.example                 # Variáveis necessárias
+```
 
 ---
 
