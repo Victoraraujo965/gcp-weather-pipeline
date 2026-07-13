@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: raw
+    database: gcp-pipeline-weather
+    schema: raw
+    tables:
+      - name: weather_raw
