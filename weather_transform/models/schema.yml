@@ -3,6 +3,11 @@ version: 2
 models:
   - name: stg_weather
     description: "Dados climáticos horários limpos e deduplicados das 5 capitais brasileiras."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - city
+            - time_utc
     columns:
       - name: time_utc
         description: "Timestamp UTC da medição horária."
@@ -18,22 +23,52 @@ models:
         description: "Temperatura a 2m do solo em graus Celsius."
         tests:
           - not_null
+      - name: apparent_temperature
+        description: "Sensação térmica em graus Celsius."
+        tests:
+          - not_null
+      - name: precipitation_probability
+        description: "Probabilidade de precipitação em percentual."
+        tests:
+          - not_null
       - name: precipitation
-        description: "Precipitação acumulada em mm."
+        description: "Precipitação acumulada na hora em mm."
+        tests:
+          - not_null
       - name: relative_humidity_2m
-        description: "Umidade relativa do ar em percentual."
+        description: "Umidade relativa do ar a 2m em percentual."
+        tests:
+          - not_null
       - name: uv_index
-        description: "Índice UV."
+        description: "Índice UV da hora."
+        tests:
+          - not_null
       - name: wind_speed_10m
         description: "Velocidade do vento a 10m em km/h."
+        tests:
+          - not_null
+      - name: wind_gusts_10m
+        description: "Velocidade das rajadas de vento a 10m em km/h."
+        tests:
+          - not_null
+      - name: cloud_cover
+        description: "Cobertura de nuvens em percentual."
+        tests:
+          - not_null
       - name: weather_code
-        description: "Código WMO de condição climática."
+        description: "Código WMO de condição climática (0=limpo, 95=tempestade)."
+        tests:
+          - not_null
+      - name: extracted_at
+        description: "Timestamp UTC de quando o dado foi extraído da API."
+        tests:
+          - not_null
 
   - name: agg_weather_daily
-    description: "Agregações diárias de clima por cidade."
+    description: "Agregações diárias de métricas climáticas por cidade, derivadas da camada Silver."
     columns:
       - name: date_utc
-        description: "Data UTC da agregação."
+        description: "Data UTC da agregação diária."
         tests:
           - not_null
       - name: city
@@ -42,9 +77,41 @@ models:
           - not_null
       - name: avg_temperature
         description: "Temperatura média diária em graus Celsius."
+        tests:
+          - not_null
       - name: max_temperature
-        description: "Temperatura máxima do dia."
+        description: "Temperatura máxima registrada no dia em graus Celsius."
+        tests:
+          - not_null
       - name: min_temperature
-        description: "Temperatura mínima do dia."
+        description: "Temperatura mínima registrada no dia em graus Celsius."
+        tests:
+          - not_null
+      - name: avg_apparent_temperature
+        description: "Sensação térmica média diária em graus Celsius."
+        tests:
+          - not_null
       - name: total_precipitation_mm
-        description: "Precipitação total do dia em mm."
+        description: "Precipitação total acumulada no dia em mm."
+        tests:
+          - not_null
+      - name: avg_humidity
+        description: "Umidade relativa média diária em percentual."
+        tests:
+          - not_null
+      - name: max_uv_index
+        description: "Índice UV máximo registrado no dia."
+        tests:
+          - not_null
+      - name: avg_wind_speed
+        description: "Velocidade média do vento a 10m no dia em km/h."
+        tests:
+          - not_null
+      - name: max_wind_gusts
+        description: "Rajada máxima de vento registrada no dia em km/h."
+        tests:
+          - not_null
+      - name: avg_cloud_cover
+        description: "Cobertura média de nuvens no dia em percentual."
+        tests:
+          - not_null
