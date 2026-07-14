@@ -221,3 +221,7 @@ profiles.yml
 *.json
 .env
 *.bak
+# EXCECOES - Artefatos do dbt docs publicados via GitHub Pages
+!docs/manifest.json
+!docs/catalog.json
+
